@@ -40,7 +40,6 @@ class TransWindow(tk.Frame):
         self.result_text.pack(pady=10)
 
     def encrypt_text(self):
-        # Pobieranie danych z pól
         text = self.input_text.get("1.0", tk.END).strip().upper()
         rows = self.rows.get()
         columns = self.columns.get()
@@ -57,15 +56,12 @@ class TransWindow(tk.Frame):
             if text_length < max_size:
                 text += 'X' * (max_size - text_length)
 
-            # Wywołanie funkcji szyfrującej
             encrypted_text = trans_encrypt(text, rows, columns, order)
 
-            # Wyświetlanie wyniku
             self.result_text.delete("1.0", tk.END)
             self.result_text.insert(tk.END, encrypted_text)
 
     def decrypt_text(self):
-        # Pobieranie danych z pól
         text = self.input_text.get("1.0", tk.END).strip().replace(" ", "").upper()
         rows = self.rows.get()
         columns = self.columns.get()
@@ -81,9 +77,7 @@ class TransWindow(tk.Frame):
             if text_length < max_size:
                 text += 'X' * (max_size - text_length)
 
-            # Wywołanie funkcji szyfrującej
             encrypted_text = trans_decrypt(text, rows, columns, order)
 
-            # Wyświetlanie wyniku
             self.result_text.delete("1.0", tk.END)
             self.result_text.insert(tk.END, encrypted_text)

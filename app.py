@@ -9,6 +9,8 @@ from Windows.trans_window import TransWindow
 from Windows.des_window import DesWindow
 from Windows.rsa_window import RsaWindow
 from Windows.diffie_hellman_window import DiffieHellmanWindow 
+from Windows.rsa_stream import RsaStream
+from Windows.signature import SignatureWindow
 
 class Application(tk.Tk):
     def __init__(self):
@@ -25,7 +27,7 @@ class Application(tk.Tk):
 
         self.frames = {}
 
-        for F in (MonoWindow, PoliWindow, TransWindow, DesWindow, AesWindow, DesOfbWindow, AesCtrWindow, RsaWindow, DiffieHellmanWindow):
+        for F in (MonoWindow, PoliWindow, TransWindow, DesWindow, AesWindow, DesOfbWindow, AesCtrWindow, RsaWindow, DiffieHellmanWindow, RsaStream, SignatureWindow):
             page_name = F.__name__
             frame = F(parent=self.container, controller=self)
             self.frames[page_name] = frame
@@ -67,9 +69,17 @@ class Application(tk.Tk):
                              command=lambda: self.show_frame("RsaWindow"))
         button8.pack(fill='x', pady=5)
 
-        button9 = ttk.Button(self.menu_frame, text="Algorytm Diffie-Hellman",
-                             command=lambda: self.show_frame("DiffieHellmanWindow"))
+        button9 = ttk.Button(self.menu_frame, text="Szyfr RSA - Stream ",
+                             command=lambda: self.show_frame("AudioProcessingApp"))
         button9.pack(fill='x', pady=5)
+
+        button10 = ttk.Button(self.menu_frame, text="Algorytm Diffie-Hellman",
+                             command=lambda: self.show_frame("DiffieHellmanWindow"))
+        button10.pack(fill='x', pady=5)
+
+        button11 = ttk.Button(self.menu_frame, text="Funkcja podpisu cyfrowego",
+                             command=lambda: self.show_frame("DigitalSignatureFrame"))
+        button11.pack(fill='x', pady=5)
 
     def show_frame(self, page_name):
         frame = self.frames[page_name]
