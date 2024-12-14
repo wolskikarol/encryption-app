@@ -18,7 +18,11 @@ class SignatureWindow(ttk.Frame):
         self.load_key_button = ttk.Button(self, text="Wczytaj klucz prywatny", command=self.load_private_key)
         self.load_pubkey_button = ttk.Button(self, text="Wczytaj klucz publiczny", command=self.load_public_key)
         self.generate_keys_button = ttk.Button(self, text="Wygeneruj klucze", command=self.generate_keys)
-        
+        self.sign_file_button = ttk.Button(self, text="Podpisz plik", command=self.sign_file)
+        self.verify_file_button = ttk.Button(self, text="Zweryfikuj podpis pliku", command=self.verify_file)
+
+        self.sign_file_button.grid(row=4, column=0, padx=5, pady=5)
+        self.verify_file_button.grid(row=4, column=1, padx=5, pady=5)
         self.message_label.grid(row=0, column=0, padx=5, pady=5, sticky="w")
         self.message_entry.grid(row=0, column=1, padx=5, pady=5, sticky="we")
         self.sign_button.grid(row=1, column=0, padx=5, pady=5)
@@ -150,6 +154,74 @@ class SignatureWindow(ttk.Frame):
             messagebox.showinfo("Sukces", f"Wygenerowano klucze:\n{private_key_path}\n{public_key_path}")
         except Exception as e:
             messagebox.showerror("Błąd", f"Nie udało się wygenerować kluczy: {e}")
+
+    def sign_file(self):
+        if not self.private_key:
+            messagebox.showerror("Błąd", "Najpierw wczytaj klucz prywatny.")
+            return
+
+        file_path = filedialog.askopenfilename(title="Wybierz plik do podpisania")
+        if not file_path:
+            return
+
+        signature_path = filedialog.asksaveasfilename(defaultextension=".sig", filetypes=[("Pliki podpisu", "*.sig")], title="Zapisz podpis")
+        if not signature_path:
+            return
+
+        try:
+            with open(file_path, "rb") as file:
+                file_data = file.read()
+
+            signature = self.private_key.sign(
+                file_data,
+                padding.PSS(
+                    mgf=padding.MGF1(hashes.SHA256()),
+                    salt_length=padding.PSS.MAX_LENGTH
+                ),
+                hashes.SHA256()
+            )
+
+            with open(signature_path, "wb") as sig_file:
+                sig_file.write(signature)
+
+            messagebox.showinfo("Sukces", f"Podpis zapisano w pliku: {signature_path}")
+        except Exception as e:
+            messagebox.showerror("Błąd", f"Nie udało się podpisać pliku: {e}")
+
+
+    def verify_file(self):
+        if not self.public_key:
+            messagebox.showerror("Błąd", "Najpierw wczytaj klucz publiczny.")
+            return
+
+        file_path = filedialog.askopenfilename(title="Wybierz plik do weryfikacji")
+        if not file_path:
+            return
+
+        signature_path = filedialog.askopenfilename(filetypes=[("Pliki podpisu", "*.sig")], title="Wybierz plik podpisu")
+        if not signature_path:
+            return
+
+        try:
+            with open(file_path, "rb") as file:
+                file_data = file.read()
+
+            with open(signature_path, "rb") as sig_file:
+                signature = sig_file.read()
+
+            self.public_key.verify(
+                signature,
+                file_data,
+                padding.PSS(
+                    mgf=padding.MGF1(hashes.SHA256()),
+                    salt_length=padding.PSS.MAX_LENGTH
+                ),
+                hashes.SHA256()
+            )
+
+            messagebox.showinfo("Sukces", "Podpis jest prawidłowy.")
+        except Exception as e:
+            messagebox.showerror("Błąd", f"Weryfikacja nie powiodła się: {e}")
 
 
 if __name__ == "__main__":

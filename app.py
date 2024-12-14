@@ -11,6 +11,9 @@ from Windows.rsa_window import RsaWindow
 from Windows.diffie_hellman_window import DiffieHellmanWindow 
 from Windows.rsa_stream import RsaStream
 from Windows.signature import SignatureWindow
+from Windows.cert_window import CertificateWindow
+from Windows.hmac_window import HmacWindow
+
 
 class Application(tk.Tk):
     def __init__(self):
@@ -27,7 +30,7 @@ class Application(tk.Tk):
 
         self.frames = {}
 
-        for F in (MonoWindow, PoliWindow, TransWindow, DesWindow, AesWindow, DesOfbWindow, AesCtrWindow, RsaWindow, DiffieHellmanWindow, RsaStream, SignatureWindow):
+        for F in (MonoWindow, PoliWindow, TransWindow, DesWindow, AesWindow, DesOfbWindow, AesCtrWindow, RsaWindow, DiffieHellmanWindow, RsaStream, CertificateWindow, SignatureWindow, HmacWindow):
             page_name = F.__name__
             frame = F(parent=self.container, controller=self)
             self.frames[page_name] = frame
@@ -77,9 +80,17 @@ class Application(tk.Tk):
                              command=lambda: self.show_frame("DiffieHellmanWindow"))
         button10.pack(fill='x', pady=5)
 
-        button11 = ttk.Button(self.menu_frame, text="Funkcja podpisu cyfrowego",
-                             command=lambda: self.show_frame("DigitalSignatureFrame"))
+        button11 = ttk.Button(self.menu_frame, text="Funkcja weryfikacji certyfikatu",
+                             command=lambda: self.show_frame("CertificateWindow"))
         button11.pack(fill='x', pady=5)
+
+        button12 = ttk.Button(self.menu_frame, text="Funkcja podpisu cyfrowego",
+                             command=lambda: self.show_frame("SignatureWindow"))
+        button12.pack(fill='x', pady=5)
+        
+        button13 = ttk.Button(self.menu_frame, text="Funkcja HMAC",
+                             command=lambda: self.show_frame("HmacWindow"))
+        button13.pack(fill='x', pady=5)
 
     def show_frame(self, page_name):
         frame = self.frames[page_name]
