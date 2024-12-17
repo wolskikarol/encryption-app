@@ -6,11 +6,16 @@ from datetime import datetime
 from cryptography import x509
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import serialization
+import os
+import platform
 
 def get_certificate_chain(hostname, port=443):
     try:
         context = SSL.Context(SSL.TLS_CLIENT_METHOD)
-        context.load_verify_locations(cafile="/etc/ssl/certs/ca-certificates.crt")
+        if platform.system() == "Windows":
+            cert_file = os.path.join(os.environ['SystemRoot'], 'System32', 'certsrv', 'certificates.pem')
+        else:
+            cert_file = "/etc/ssl/certs/ca-certificates.crt"
         conn = SSL.Connection(context, socket.create_connection((hostname, port)))
         conn.set_tlsext_host_name(hostname.encode())
         conn.set_connect_state()

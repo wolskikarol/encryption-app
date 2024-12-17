@@ -11,27 +11,46 @@ class SignatureWindow(ttk.Frame):
         self.private_key = None
         self.public_key = None
 
+        self.create_widgets()
+        self.layout_widgets()
+
+    def create_widgets(self):
         self.message_label = ttk.Label(self, text="Wiadomość:")
         self.message_entry = ttk.Entry(self, width=50)
+
         self.sign_button = ttk.Button(self, text="Podpisz", command=self.sign_message)
         self.verify_button = ttk.Button(self, text="Zweryfikuj podpis", command=self.verify_signature)
+        
         self.load_key_button = ttk.Button(self, text="Wczytaj klucz prywatny", command=self.load_private_key)
         self.load_pubkey_button = ttk.Button(self, text="Wczytaj klucz publiczny", command=self.load_public_key)
         self.generate_keys_button = ttk.Button(self, text="Wygeneruj klucze", command=self.generate_keys)
+        
         self.sign_file_button = ttk.Button(self, text="Podpisz plik", command=self.sign_file)
         self.verify_file_button = ttk.Button(self, text="Zweryfikuj podpis pliku", command=self.verify_file)
 
-        self.sign_file_button.grid(row=4, column=0, padx=5, pady=5)
-        self.verify_file_button.grid(row=4, column=1, padx=5, pady=5)
-        self.message_label.grid(row=0, column=0, padx=5, pady=5, sticky="w")
-        self.message_entry.grid(row=0, column=1, padx=5, pady=5, sticky="we")
-        self.sign_button.grid(row=1, column=0, padx=5, pady=5)
-        self.verify_button.grid(row=1, column=1, padx=5, pady=5)
-        self.load_key_button.grid(row=2, column=0, padx=5, pady=5)
-        self.load_pubkey_button.grid(row=2, column=1, padx=5, pady=5)
-        self.generate_keys_button.grid(row=3, column=0, padx=5, pady=5, columnspan=2)
+    def layout_widgets(self):
+        message_frame = ttk.LabelFrame(self, text="Wiadomość")
+        keys_frame = ttk.LabelFrame(self, text="Zarządzanie kluczami")
+        actions_frame = ttk.LabelFrame(self, text="Operacje")
+        files_frame = ttk.LabelFrame(self, text="Pliki")
 
-        self.columnconfigure(1, weight=1)
+        message_frame.pack(fill="x", padx=10, pady=5)
+        keys_frame.pack(fill="x", padx=10, pady=5)
+        actions_frame.pack(fill="x", padx=10, pady=5)
+        files_frame.pack(fill="x", padx=10, pady=5)
+
+        self.message_label.pack(anchor="w", padx=5, pady=5)
+        self.message_entry.pack(fill="x", padx=5, pady=5)
+
+        self.generate_keys_button.pack(anchor="w", padx=5, pady=5)
+        self.load_key_button.pack(anchor="w", padx=5, pady=5)
+        self.load_pubkey_button.pack(anchor="w", padx=5, pady=5)
+
+        self.sign_button.pack(anchor="w", padx=5, pady=5)
+        self.verify_button.pack(anchor="w", padx=5, pady=5)
+
+        self.sign_file_button.pack(anchor="w", padx=5, pady=5)
+        self.verify_file_button.pack(anchor="w", padx=5, pady=5)
 
     def sign_message(self):
         if not self.private_key:
@@ -222,10 +241,3 @@ class SignatureWindow(ttk.Frame):
             messagebox.showinfo("Sukces", "Podpis jest prawidłowy.")
         except Exception as e:
             messagebox.showerror("Błąd", f"Weryfikacja nie powiodła się: {e}")
-
-
-if __name__ == "__main__":
-    root = tk.Tk()
-    root.title("Cyfrowy Podpis")
-    SignatureWindow(root).pack(fill="both", expand=True, padx=10, pady=10)
-    root.mainloop()

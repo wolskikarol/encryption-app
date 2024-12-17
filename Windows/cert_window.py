@@ -1,4 +1,3 @@
-import ssl
 import socket
 from OpenSSL import SSL
 from OpenSSL import crypto
@@ -106,9 +105,3 @@ def verify_certificate_chain(cert_chain):
         if issuer != subject:
             return False, f"Certyfikat {i+1} nie został wystawiony przez następny certyfikat."
     return True, "Łańcuch certyfikatów jest prawidłowy."
-
-if __name__ == "__main__":
-    root = tk.Tk()
-    root.title("Weryfikacja Certyfikatów")
-    CertificateWindow(root).pack(fill="both", expand=True, padx=10, pady=10)
-    root.mainloop()

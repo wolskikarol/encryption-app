@@ -9,10 +9,12 @@ from Windows.trans_window import TransWindow
 from Windows.des_window import DesWindow
 from Windows.rsa_window import RsaWindow
 from Windows.diffie_hellman_window import DiffieHellmanWindow 
-from Windows.rsa_stream import RsaStream
+from Windows.rsa_stream import RsaStreamWindow
 from Windows.signature import SignatureWindow
 from Windows.cert_window import CertificateWindow
 from Windows.hmac_window import HmacWindow
+from Windows.huffman_window import HuffmanWindow
+from Windows.hamming_window import HammingWindow
 
 
 class Application(tk.Tk):
@@ -30,7 +32,7 @@ class Application(tk.Tk):
 
         self.frames = {}
 
-        for F in (MonoWindow, PoliWindow, TransWindow, DesWindow, AesWindow, DesOfbWindow, AesCtrWindow, RsaWindow, DiffieHellmanWindow, RsaStream, CertificateWindow, SignatureWindow, HmacWindow):
+        for F in (MonoWindow, PoliWindow, TransWindow, DesWindow, AesWindow, DesOfbWindow, AesCtrWindow, RsaWindow, DiffieHellmanWindow, RsaStreamWindow, CertificateWindow, SignatureWindow, HmacWindow, HuffmanWindow, HammingWindow):
             page_name = F.__name__
             frame = F(parent=self.container, controller=self)
             self.frames[page_name] = frame
@@ -73,7 +75,7 @@ class Application(tk.Tk):
         button8.pack(fill='x', pady=5)
 
         button9 = ttk.Button(self.menu_frame, text="Szyfr RSA - Stream ",
-                             command=lambda: self.show_frame("AudioProcessingApp"))
+                             command=lambda: self.show_frame("RsaStreamWindow"))
         button9.pack(fill='x', pady=5)
 
         button10 = ttk.Button(self.menu_frame, text="Algorytm Diffie-Hellman",
@@ -91,6 +93,14 @@ class Application(tk.Tk):
         button13 = ttk.Button(self.menu_frame, text="Funkcja HMAC",
                              command=lambda: self.show_frame("HmacWindow"))
         button13.pack(fill='x', pady=5)
+
+        button14 = ttk.Button(self.menu_frame, text="Kodowanie Huffmana",
+                             command=lambda: self.show_frame("HuffmanWindow"))
+        button14.pack(fill='x', pady=5)
+
+        button15 = ttk.Button(self.menu_frame, text="Kodowanie Hamminga",
+                             command=lambda: self.show_frame("HammingWindow"))
+        button15.pack(fill='x', pady=5)
 
     def show_frame(self, page_name):
         frame = self.frames[page_name]

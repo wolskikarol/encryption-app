@@ -23,7 +23,7 @@ public_key = key.publickey()
 cipher_encrypt = PKCS1_OAEP.new(public_key)
 cipher_decrypt = PKCS1_OAEP.new(key)
 
-class RsaStream(tk.Frame):
+class RsaStreamWindow(tk.Frame):
     def __init__(self, parent=None, controller=None):
         super().__init__(parent)
         self.master = parent
@@ -142,6 +142,6 @@ class RsaStream(tk.Frame):
 if __name__ == "__main__":
     root = tk.Tk()
     root.title("Audio Processing App")
-    app = RsaStream(master=root)
+    app = RsaStreamWindow(master=root)
     app.pack()
     root.mainloop()
